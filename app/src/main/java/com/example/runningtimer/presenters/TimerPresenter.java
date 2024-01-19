@@ -60,10 +60,10 @@ public class TimerPresenter {
     public void startStopAllTimers() {
         if (areAllTimersStarted(stopwatchList)) {
             stopTimers(stopwatchList);
-            view.setStopAllButtonText();
+            view.setStartAllButtonText();
         } else {
             startTimers(stopwatchList);
-            view.setStartAllButtonText();
+            view.setStopAllButtonText();
         }
     }
 

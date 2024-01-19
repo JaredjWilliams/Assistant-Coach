@@ -37,7 +37,7 @@
         android:id="@+id/start_all_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start All"
+        android:text="Start All Timers"
         app:layout_constraintBottom_toTopOf="@+id/nav_view" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -3,9 +3,12 @@ package com.example.runningtimer.ui.bottom_navigation;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.ui.profiles.ProfilesActivity;
@@ -23,7 +26,9 @@ public class BottomNavigationMenu {
         this.currentSelectionId = currentSelectionId;
         this.context = context;
         bottomNavigationView = activity.findViewById(R.id.nav_view);
-
+        bottomNavigationView.setBackgroundColor(ContextCompat.getColor(context, R.color.purple_500));
+        bottomNavigationView.setItemTextColor(ColorStateList.valueOf(Color.WHITE));
+        bottomNavigationView.setItemIconTintList(ColorStateList.valueOf(Color.WHITE));
         setBottomNavListener();
     }
 

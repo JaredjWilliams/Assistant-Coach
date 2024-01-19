@@ -1,4 +1,4 @@
-package com.example.runningtimer.stopwatch;
+package com.example.runningtimer.ui.timers;
 
 import android.content.Context;
 import android.os.Handler;
@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runningtimer.R;
+import com.example.runningtimer.presenters.TimerPresenter;
 import com.example.runningtimer.stopwatch.models.Lap;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
 

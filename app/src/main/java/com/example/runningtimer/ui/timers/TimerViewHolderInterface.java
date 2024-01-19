@@ -1,4 +1,4 @@
-package com.example.runningtimer.stopwatch;
+package com.example.runningtimer.ui.timers;
 
 import android.widget.EditText;
 

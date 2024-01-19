@@ -25,8 +25,14 @@
 
     <activity
         android:id="@+id/navigation_timer"
-        android:name="com.example.runningtimer.stopwatch.TimerActivity"
+        android:name="com.example.runningtimer.ui.timers.TimersActivity"
         android:label="Timer"
-        tools:layout="@layout/activity_timer"/>
+        tools:layout="@layout/activity_timers"/>
+
+    <activity
+        android:id="@+id/navigation_profiles"
+        android:name="com.example.runningtimer.ui.profiles.ProfilesActivity"
+        android:label="Profiles"
+        tools:layout="@layout/activity_profiles"/>
 
 </navigation>

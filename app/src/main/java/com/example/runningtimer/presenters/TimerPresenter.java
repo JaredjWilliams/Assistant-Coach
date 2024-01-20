@@ -84,4 +84,19 @@ public class TimerPresenter {
         view.updateAdapter(stopwatchList);
     }
 
+    public void startStopTimer(Stopwatch stopwatch) {
+        if (stopwatch.isStarted()) {
+            stopwatch.stopTimer();
+        } else {
+            stopwatch.startTimer();
+        }
+    }
+
+    public void delete(Stopwatch stopwatch) {
+        int position = stopwatchList.indexOf(stopwatch);
+
+        stopwatchList.remove(stopwatch);
+        view.updateAdapter(position);
+    }
+
 }

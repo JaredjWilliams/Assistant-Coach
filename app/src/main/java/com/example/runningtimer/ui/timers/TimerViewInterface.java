@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface TimerViewInterface {
 
+    void updateAdapter(int position);
+
     void updateAdapter(List<Stopwatch> stopwatchList);
 
     void setStartAllButtonText();

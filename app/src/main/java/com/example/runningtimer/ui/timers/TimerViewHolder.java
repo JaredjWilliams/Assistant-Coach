@@ -3,7 +3,6 @@ package com.example.runningtimer.ui.timers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,29 +10,33 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.presenters.TimerPresenter;
-import com.example.runningtimer.stopwatch.models.Lap;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
 
 public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerViewHolderInterface {
 
-    LinearLayout stopwatchLayout;
+    ConstraintLayout stopwatchLayout;
     TimerPresenter presenter;
     GridLayout laps;
-    Button startButton;
-    Button stopButton;
-    Button lapButton;
-    TextView textView;
+    Button startButton, lapButton;
+    TextView timeText;
     EditText name;
     Stopwatch stopwatch;
     Context context;
+    ImageView athletePicture;
+    ImageButton deleteTimerButton;
+    int position;
+
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     public TimerViewHolder(@NonNull View itemView) {
@@ -48,18 +51,23 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         stopwatchLayout = itemView.findViewById(R.id.stopwatch_layout);
 
         startButton = itemView.findViewById(R.id.start_button);
-        stopButton = itemView.findViewById(R.id.stop_button);
         lapButton = itemView.findViewById(R.id.lap_button);
 
         laps = itemView.findViewById(R.id.laps_layout);
-        textView = itemView.findViewById(R.id.timer_number);
+        timeText = itemView.findViewById(R.id.timer_number);
         name = itemView.findViewById(R.id.athlete_name);
+        athletePicture = itemView.findViewById(R.id.athlete_picture);
+        deleteTimerButton = itemView.findViewById(R.id.delete_timer_button);
 
         setupStartButtonClick();
-        setupStopButtonClick();
         setupLapButtonClick();
+        setDeleteTimerButtonClick();
 
         setEditListener(name);
+
+        setStartStopButtonUI();
+
+
     }
 
     public void setName() {
@@ -71,34 +79,47 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     }
 
     public void setLapsLayout() {
-        for (Lap lap : stopwatch.getLaps()) {
-            System.out.println("Lap in set: " + lap);
-            TextView textview = new TextView(context);
-            String lapText = "" + lap.getLapCount() + ": " + lap.getTime();
-            textview.setText(lapText);
+//        for (Lap lap : stopwatch.getLaps()) {
+//            System.out.println("Lap in set: " + lap);
+//            TextView textview = new TextView(context);
+//            String lapText = "" + lap.getLapCount() + ": " + lap.getTime();
+//            textview.setText(lapText);
+//
+//            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+//            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+//            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+//
+//            laps.addView(textview);
+//        }
+    }
 
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
-            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+    public void setDeleteTimerButtonClick() {
+        deleteTimerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.delete(stopwatch);
+            }
+        });
+    }
 
-            laps.addView(textview);
+    public void setStartStopButtonUI() {
+
+        if (stopwatch == null) {
+            return;
         }
+
+        int buttonColor = ContextCompat.getColor(context, stopwatch.isStarted() ? R.color.stop_button_color : R.color.start_button_color);
+        startButton.setBackgroundColor(buttonColor);
+        startButton.setText(stopwatch.isStarted() ? "Stop" : "Start");
     }
 
     private void setupStartButtonClick() {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopwatch.startTimer();
-            }
-        });
-    }
+                presenter.startStopTimer(stopwatch);
 
-    private void setupStopButtonClick() {
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopwatch.stopTimer();
+                setStartStopButtonUI();
             }
         });
     }
@@ -110,24 +131,24 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
             @Override
             public void onClick(View v) {
 
-                stopwatch.lapTimer();
-                Lap lastLap = stopwatch.getLastLap();
-                TextView textview = new TextView(context);
-                String lapText = "<b>" + lastLap.getLapCount() + ":</b> " + lastLap.getTime();
-                textview.setText(Html.fromHtml(lapText, Html.FROM_HTML_MODE_LEGACY));
-
-
-                params.width = GridLayout.LayoutParams.WRAP_CONTENT;
-                params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-                textview.setPadding(5, 5, 5, 5);
-
-                laps.addView(textview);
+//                stopwatch.lapTimer();
+//                Lap lastLap = stopwatch.getLastLap();
+//                TextView textview = new TextView(context);
+//                String lapText = "<b>" + lastLap.getLapCount() + ":</b> " + lastLap.getTime();
+//                textview.setText(Html.fromHtml(lapText, Html.FROM_HTML_MODE_LEGACY));
+//
+//
+//                params.width = GridLayout.LayoutParams.WRAP_CONTENT;
+//                params.height = GridLayout.LayoutParams.WRAP_CONTENT;
+//                textview.setPadding(5, 5, 5, 5);
+//
+//                laps.addView(textview);
             }
         });
     }
 
     private void updateUI() {
-        textView.setText(stopwatch.getElapsedTime());
+        timeText.setText(stopwatch.getElapsedTime());
     }
 
     private void startUpdatingUITask() {

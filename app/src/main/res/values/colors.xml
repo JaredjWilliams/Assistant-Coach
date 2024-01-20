@@ -19,4 +19,7 @@
     <color name="tertiary_background">#F6F6F6</color>
     <color name="quaternary_background">#F6F6F6</color>
 
+    <color name="start_button_color">#009900</color>
+    <color name="stop_button_color">#E60026</color>
+
 </resources>

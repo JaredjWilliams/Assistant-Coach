@@ -36,11 +36,12 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TimerViewHolder holder, int position) {
 
-        holder.stopwatch = stopwatchList.get(position);
         holder.context = context;
+        holder.stopwatch = stopwatchList.get(position);
+        holder.presenter = presenter;
         holder.setName();
         holder.setLapsLayout();
-
+        holder.setStartStopButtonUI();
     }
 
     @Override

@@ -1,76 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stopwatch_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/stopwatch_layout"
+    android:layout_marginBottom="10dp"
     android:background="@drawable/card_background"
-    android:padding="10dp"
-    android:layout_marginTop="10dp"
-    android:orientation="vertical">
+    android:padding="5dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/timer_number"
+        android:layout_width="167dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/athlete_picture"
+        app:layout_constraintTop_toBottomOf="@+id/athlete_name" />
+
+    <EditText
+        android:id="@+id/athlete_name"
+        android:layout_width="164dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="5dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Enter Name"
+        android:textSize="25sp"
+        app:layout_constraintStart_toEndOf="@+id/athlete_picture"
+        app:layout_constraintTop_toTopOf="@+id/athlete_picture" />
+
+    <Button
+        android:id="@+id/start_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="5dp"
+        android:theme="@style/Theme.RunningTimer"
+        android:text="Start"
+        app:layout_constraintStart_toEndOf="@+id/athlete_picture"
+        app:layout_constraintTop_toBottomOf="@+id/timer_number" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:id="@+id/timer_number"/>
-
-        <EditText
-            android:id="@+id/athlete_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="10dp"
-            android:imeOptions="actionDone"
-            android:textSize="30sp" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/lap_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="5dp"
+        android:padding="5dp"
+        android:text="Lap"
+        app:layout_constraintStart_toEndOf="@+id/start_button"
+        app:layout_constraintTop_toBottomOf="@+id/timer_number" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <ImageView
+        android:id="@+id/athlete_picture"
+        android:layout_width="127dp"
+        android:layout_height="121dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Start"
-                android:id="@+id/start_button"/>
+    <ImageButton
+        android:background="@color/secondary_background"
+        android:id="@+id/delete_timer_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_delete" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Stop"
-                android:id="@+id/stop_button"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lap"
-                android:id="@+id/lap_button"/>
-
-        </LinearLayout>
-
-        <GridLayout
-            android:id="@+id/laps_layout"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rowCount="7"
-            android:columnCount="3">
-
-        </GridLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

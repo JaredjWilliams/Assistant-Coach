@@ -1,45 +1,40 @@
-package com.example.runningtimer.stopwatch;
+package com.example.runningtimer.ui.timers;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.runningtimer.R;
+import com.example.runningtimer.presenters.TimerPresenter;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
+import com.example.runningtimer.ui.bottom_navigation.BottomNavigationMenu;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TimerActivity extends AppCompatActivity implements TimerViewInterface {
+public class TimersActivity extends AppCompatActivity implements TimerViewInterface {
 
-
-
-    private List<Stopwatch> stopwatchList = new ArrayList<Stopwatch>();
-    private TimerPresenter presenter = new TimerPresenter(this);
-    private Button addTimerButton;
-    private Button startAllButton;
-    TimerAdapter adapter;
+    private final TimerPresenter presenter = new TimerPresenter(this);
+    private Button addTimerButton, startAllButton;
+    private TimerAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_timer);
+        setContentView(R.layout.activity_timers);
 
         setupViews();
+
+        new BottomNavigationMenu(this, this, R.id.navigation_timer);
     }
 
     private void setupRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.stopwatch_recycler_view);
-        adapter = new TimerAdapter(stopwatchList, getApplication(), presenter);
+        adapter = new TimerAdapter(stopwatchList(), getApplication(), presenter);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -58,7 +53,7 @@ public class TimerActivity extends AppCompatActivity implements TimerViewInterfa
         addTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addTimer();
+                presenter.addTimer();
             }
         });
     }
@@ -67,36 +62,33 @@ public class TimerActivity extends AppCompatActivity implements TimerViewInterfa
         startAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startStopAllTimers();
+                presenter.startStopAllTimers();
+                adapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void addTimer() {
-        stopwatchList.add(new Stopwatch());
+    @Override
+    public void updateAdapter(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void updateAdapter(List<Stopwatch> stopwatchList) {
         adapter.notifyItemInserted(stopwatchList.size() - 1);
     }
 
-    private void startStopAllTimers() {
-
-        if (presenter.areAllTimersStarted(stopwatchList)) {
-            for (Stopwatch stopwatch : stopwatchList) {
-                stopwatch.stopTimer();
-            }
-            setStopAllButtonText();
-        } else {
-            for (Stopwatch stopwatch : stopwatchList) {
-                stopwatch.startTimer();
-            }
-            setStartAllButtonText();
-        }
-    }
-
-    private void setStartAllButtonText() {
+    @Override
+    public void setStartAllButtonText() {
         startAllButton.setText("Start All Timers");
     }
 
-    private void setStopAllButtonText() {
+    @Override
+    public void setStopAllButtonText() {
         startAllButton.setText("Stop All Timers");
+    }
+
+    private List<Stopwatch> stopwatchList() {
+        return presenter.stopwatchList;
     }
 }

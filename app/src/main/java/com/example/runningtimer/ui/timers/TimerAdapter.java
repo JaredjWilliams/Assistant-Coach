@@ -1,4 +1,4 @@
-package com.example.runningtimer.stopwatch;
+package com.example.runningtimer.ui.timers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runningtimer.R;
+import com.example.runningtimer.presenters.TimerPresenter;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
 
 import java.util.List;
@@ -21,7 +22,6 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
     public TimerAdapter(List<Stopwatch> stopwatchList, Context context, TimerPresenter presenter) {
         this.stopwatchList = stopwatchList;
         this.presenter = presenter;
-        System.out.println("Presenter is null: " + (presenter == null ? "yes" : "no"));
         this.context = context;
     }
 
@@ -36,11 +36,12 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TimerViewHolder holder, int position) {
 
-        holder.stopwatch = stopwatchList.get(position);
         holder.context = context;
+        holder.stopwatch = stopwatchList.get(position);
+        holder.presenter = presenter;
         holder.setName();
         holder.setLapsLayout();
-
+        holder.setStartStopButtonUI();
     }
 
     @Override

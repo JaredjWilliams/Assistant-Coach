@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.db.ProfileDatabaseHelper;
@@ -13,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class ProfilesActivity extends AppCompatActivity {
 
 
+    ConstraintLayout profilePopup;
     FloatingActionButton addProfileButton;
     ProfileDatabaseHelper profileDb;
 
@@ -23,6 +25,11 @@ public class ProfilesActivity extends AppCompatActivity {
         profileDb = new ProfileDatabaseHelper(this);
 
         setContentView(R.layout.activity_profiles);
+
+
+        setUpViews();
+
+        setUpAddProfileButtonClick();
 
         new BottomNavigationMenu(this, this, R.id.navigation_profiles);
     }
@@ -35,7 +42,7 @@ public class ProfilesActivity extends AppCompatActivity {
         addProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                profileDb.addProfile("Jared");
+                new NewProfilePopup(ProfilesActivity.this, ProfilesActivity.this).showPopUp();
             }
         });
     }

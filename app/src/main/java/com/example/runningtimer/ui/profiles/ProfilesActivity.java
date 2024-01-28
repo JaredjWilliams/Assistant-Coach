@@ -14,9 +14,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class ProfilesActivity extends AppCompatActivity {
 
 
-    ConstraintLayout profilePopup;
-    FloatingActionButton addProfileButton;
-    ProfileDatabaseHelper profileDb;
+    private ConstraintLayout profilePopup;
+    private FloatingActionButton addProfileButton;
+    private ProfileDatabaseHelper profileDb;
+    private ProfileAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

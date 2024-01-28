@@ -1,10 +1,9 @@
 package com.example.runningtimer.ui.timers;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -35,16 +34,27 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     Context context;
     ImageView athletePicture;
     ImageButton deleteTimerButton;
-    int position;
+    TranslateAnimation slideIn = new TranslateAnimation(
+            TranslateAnimation.RELATIVE_TO_PARENT, 1.0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.0f
+    );
+    TranslateAnimation slideOut = new TranslateAnimation(
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, -1.0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.0f
+    );
 
-    private final Handler uiHandler = new Handler(Looper.getMainLooper());
+//    private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     public TimerViewHolder(@NonNull View itemView) {
         super(itemView);
 
         setupViews(itemView);
 
-        startUpdatingUITask();
+//        startUpdatingUITask();
     }
 
     public void setupViews(View itemView) {
@@ -67,8 +77,19 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 
         setStartStopButtonUI();
 
-
+        slideIn.setDuration(500);
+        slideOut.setDuration(500);
     }
+
+
+    public void performSlideIn() {
+        stopwatchLayout.startAnimation(slideIn);
+    }
+
+    public void performSlideOut() {
+        stopwatchLayout.startAnimation(slideOut);
+    }
+
 
     public void setName() {
         name.setText(stopwatch.getName());
@@ -79,25 +100,16 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     }
 
     public void setLapsLayout() {
-//        for (Lap lap : stopwatch.getLaps()) {
-//            System.out.println("Lap in set: " + lap);
-//            TextView textview = new TextView(context);
-//            String lapText = "" + lap.getLapCount() + ": " + lap.getTime();
-//            textview.setText(lapText);
-//
-//            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-//            params.width = GridLayout.LayoutParams.WRAP_CONTENT;
-//            params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-//
-//            laps.addView(textview);
-//        }
+
     }
 
     public void setDeleteTimerButtonClick() {
         deleteTimerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                performSlideOut();
                 presenter.delete(stopwatch);
+
             }
         });
     }
@@ -118,7 +130,6 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
             @Override
             public void onClick(View v) {
                 presenter.startStopTimer(stopwatch);
-
                 setStartStopButtonUI();
             }
         });
@@ -147,20 +158,25 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         });
     }
 
-    private void updateUI() {
+    public void updateUI() {
+        updateTimeText();
+        setStartStopButtonUI();
+    }
+
+    private void updateTimeText() {
         timeText.setText(stopwatch.getElapsedTime());
     }
 
-    private void startUpdatingUITask() {
-        uiHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                updateUI();
-                uiHandler.postDelayed(this, 1000);
-            }
-        }, 0);
-    }
+//    private void startUpdatingUITask() {
+//        uiHandler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                updateUI();
+//                uiHandler.postDelayed(this, 1000);
+//            }
+//        }, 0);
+//    }
 
     @Override
     public String getNameChange() {

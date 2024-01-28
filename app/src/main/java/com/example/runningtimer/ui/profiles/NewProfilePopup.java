@@ -48,8 +48,8 @@ public class NewProfilePopup extends ConstraintLayout {
 
         cancelButton.setBackgroundColor(ContextCompat.getColor(context, R.color.stop_button_color));
 
-        fadeIn.setDuration(1000);
-        fadeOut.setDuration(1000);
+        fadeIn.setDuration(500);
+        fadeOut.setDuration(500);
         setAnimationListener();
         setFadeOutListener();
     }

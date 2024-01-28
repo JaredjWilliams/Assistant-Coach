@@ -1,6 +1,8 @@
 package com.example.runningtimer.ui.timers;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import com.example.runningtimer.stopwatch.models.Stopwatch;
 import java.util.List;
 
 public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
+
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
     private TimerPresenter presenter;
     List<Stopwatch> stopwatchList;
     Context context;
@@ -40,12 +44,24 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
         holder.stopwatch = stopwatchList.get(position);
         holder.presenter = presenter;
         holder.setName();
-        holder.setLapsLayout();
-        holder.setStartStopButtonUI();
+        holder.performSlideIn();
+
+        startUpdatingUITask(holder);
     }
 
     @Override
     public int getItemCount() {
         return stopwatchList.size();
+    }
+
+    private void startUpdatingUITask(TimerViewHolder holder) {
+        uiHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                holder.updateUI();
+                uiHandler.postDelayed(this, 500);
+            }
+        }, 0);
     }
 }

@@ -63,7 +63,6 @@ public class TimersActivity extends AppCompatActivity implements TimerViewInterf
             @Override
             public void onClick(View v) {
                 presenter.startStopAllTimers();
-                adapter.notifyDataSetChanged();
             }
         });
     }

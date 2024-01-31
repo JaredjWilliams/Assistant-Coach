@@ -77,4 +77,11 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 .map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase())
                 .collect(Collectors.joining(" "));
     }
+
+    public void deleteData() {
+        String query = "Delete from " + TABLE_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL(query);
+    }
 }

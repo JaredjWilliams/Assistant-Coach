@@ -76,4 +76,8 @@ public class ProfilesPresenter {
     public ArrayList<Profile> getListOfProfiles() {
         return listOfProfiles;
     }
+
+    public void deleteTable() {
+        profileDb.deleteData();
+    }
 }

@@ -56,6 +56,7 @@ public class ProfilesActivity extends AppCompatActivity implements ProfilesViewI
             @Override
             public void onClick(View view) {
                 new NewProfilePopup(ProfilesActivity.this, ProfilesActivity.this, presenter).showPopUp();
+                presenter.deleteTable();
             }
         });
     }

@@ -12,13 +12,15 @@ import com.example.runningtimer.R;
 import com.example.runningtimer.presenters.TimerPresenter;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
 import com.example.runningtimer.ui.bottom_navigation.BottomNavigationMenu;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
 public class TimersActivity extends AppCompatActivity implements TimerViewInterface {
 
     private final TimerPresenter presenter = new TimerPresenter(this);
-    private Button addTimerButton, startAllButton;
+    private Button startAllButton;
+    private FloatingActionButton addTimerButton;
     private TimerAdapter adapter;
 
     @Override

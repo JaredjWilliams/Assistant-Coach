@@ -47,14 +47,10 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
             TranslateAnimation.RELATIVE_TO_PARENT, 0.0f
     );
 
-//    private final Handler uiHandler = new Handler(Looper.getMainLooper());
-
     public TimerViewHolder(@NonNull View itemView) {
         super(itemView);
 
         setupViews(itemView);
-
-//        startUpdatingUITask();
     }
 
     public void setupViews(View itemView) {
@@ -104,13 +100,10 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     }
 
     public void setDeleteTimerButtonClick() {
-        deleteTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                performSlideOut();
-                presenter.delete(stopwatch);
+        deleteTimerButton.setOnClickListener(view -> {
+            performSlideOut();
+            presenter.delete(stopwatch);
 
-            }
         });
     }
 
@@ -126,21 +119,16 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     }
 
     private void setupStartButtonClick() {
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.startStopTimer(stopwatch);
-                setStartStopButtonUI();
-            }
+        startButton.setOnClickListener(v -> {
+            presenter.startStopTimer(stopwatch);
+            setStartStopButtonUI();
         });
     }
 
     private void setupLapButtonClick() {
 
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        lapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        lapButton.setOnClickListener(v -> {
 
 //                stopwatch.lapTimer();
 //                Lap lastLap = stopwatch.getLastLap();
@@ -154,7 +142,6 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 //                textview.setPadding(5, 5, 5, 5);
 //
 //                laps.addView(textview);
-            }
         });
     }
 
@@ -167,17 +154,6 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         timeText.setText(stopwatch.getElapsedTime());
     }
 
-//    private void startUpdatingUITask() {
-//        uiHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                updateUI();
-//                uiHandler.postDelayed(this, 1000);
-//            }
-//        }, 0);
-//    }
-
     @Override
     public String getNameChange() {
         return name.getText().toString();
@@ -188,21 +164,18 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     }
 
     public void setEditListener(EditText editText) {
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
-                    onEnterPressed(editText);
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                onEnterPressed(editText);
 
-                    InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+                InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
-                    editText.clearFocus();
+                editText.clearFocus();
 
-                    return true;
-                }
-                return false;
+                return true;
             }
+            return false;
         });
     }
 }

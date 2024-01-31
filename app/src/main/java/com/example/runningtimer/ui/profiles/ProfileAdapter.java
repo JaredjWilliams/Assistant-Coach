@@ -13,7 +13,7 @@ import com.example.runningtimer.stopwatch.models.Profile;
 
 import java.util.List;
 
-public class ProfileAdapter extends RecyclerView.Adapter {
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
 
     private ProfilesPresenter presenter;
     private List<Profile> profiles;
@@ -23,17 +23,20 @@ public class ProfileAdapter extends RecyclerView.Adapter {
         this.profiles = profiles;
         this.context = context;
         this.presenter = presenter;
+
+        System.out.println(profiles.toString());
     }
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_layout, parent, false);
         return new ProfileViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull ProfileViewHolder holder, int position) {
+        holder.profile = profiles.get(position);
+        holder.setProfileName();
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.example.runningtimer.ui.timers;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,13 +16,15 @@ import java.util.List;
 
 public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
 
-    private final Handler uiHandler = new Handler(Looper.getMainLooper());
+
+    private RecyclerView recyclerView;
     private TimerPresenter presenter;
     List<Stopwatch> stopwatchList;
     Context context;
 
-    public TimerAdapter(List<Stopwatch> stopwatchList, Context context, TimerPresenter presenter) {
+    public TimerAdapter(List<Stopwatch> stopwatchList, Context context, TimerPresenter presenter, RecyclerView recyclerView) {
         this.stopwatchList = stopwatchList;
+        this.recyclerView = recyclerView;
         this.presenter = presenter;
         this.context = context;
     }
@@ -45,8 +45,7 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
         holder.presenter = presenter;
         holder.setName();
         holder.performSlideIn();
-
-        startUpdatingUITask(holder);
+        holder.updateUI();
     }
 
     @Override
@@ -54,14 +53,15 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
         return stopwatchList.size();
     }
 
-    private void startUpdatingUITask(TimerViewHolder holder) {
-        uiHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
 
-                holder.updateUI();
-                uiHandler.postDelayed(this, 500);
+
+    public void updateViews() {
+        for (int i = 0; i < getItemCount(); i++) {
+            TimerViewHolder viewHolder = (TimerViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
+
+            if (viewHolder != null) {
+                viewHolder.updateUI();
             }
-        }, 0);
+        }
     }
 }

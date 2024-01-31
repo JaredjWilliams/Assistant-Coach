@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,19 +18,21 @@ import androidx.core.content.ContextCompat;
 import com.example.runningtimer.R;
 import com.example.runningtimer.db.ProfileDatabaseHelper;
 
-public class NewProfilePopup extends ConstraintLayout {
+public class NewProfilePopup extends PopupWindow {
 
     Animation fadeIn = new AlphaAnimation(0, 1);
     Animation fadeOut = new AlphaAnimation(1, 0);
+    ProfilesPresenter presenter;
     ProfileDatabaseHelper profileDb;
     ConstraintLayout saveProfileLayout;
     EditText nameField;
     Button saveButton, cancelButton;
     Context context;
 
-    public NewProfilePopup(Context context, Activity activity) {
+    public NewProfilePopup(Context context, Activity activity, ProfilesPresenter presenter) {
         super(context);
         this.context = context;
+        this.presenter = presenter;
 
         profileDb = new ProfileDatabaseHelper(context);
 
@@ -38,6 +41,7 @@ public class NewProfilePopup extends ConstraintLayout {
         setEditTextListener();
         setSaveButtonListener();
         setCancelButtonListener();
+        saveProfileLayout.bringToFront();
     }
 
     private void setupViews(Activity activity) {
@@ -59,13 +63,14 @@ public class NewProfilePopup extends ConstraintLayout {
             @Override
             public void onClick(View view) {
                 String name = nameField.getText().toString().trim().toLowerCase();
-                profileDb.addProfile(name);
+                presenter.addProfile(name);
+                saveProfileLayout.startAnimation(fadeOut);
             }
         });
     }
 
     private void setCancelButtonListener() {
-        cancelButton.setOnClickListener(new OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveProfileLayout.startAnimation(fadeOut);
@@ -80,6 +85,7 @@ public class NewProfilePopup extends ConstraintLayout {
 
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     saveProfileLayout.setVisibility(View.GONE);
+
                 }
 
                 return false;
@@ -96,7 +102,7 @@ public class NewProfilePopup extends ConstraintLayout {
         fadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                saveProfileLayout.setVisibility(VISIBLE);
+                saveProfileLayout.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -120,7 +126,7 @@ public class NewProfilePopup extends ConstraintLayout {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                saveProfileLayout.setVisibility(GONE);
+                saveProfileLayout.setVisibility(View.GONE);
             }
 
             @Override

@@ -100,6 +100,8 @@ public class TimerPresenter {
         } else {
             stopwatch.startTimer();
         }
+
+        startUpdatingUITask();
     }
 
     public void delete(Stopwatch stopwatch) {

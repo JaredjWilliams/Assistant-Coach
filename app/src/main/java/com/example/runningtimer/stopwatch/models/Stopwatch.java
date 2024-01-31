@@ -22,7 +22,7 @@ public class Stopwatch {
     private boolean isStarted;
 
     public Stopwatch() {
-        this.name = "Enter a name";
+        this.name = "";
     }
 
     public void startTimer() {

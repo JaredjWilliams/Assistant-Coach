@@ -1,13 +1,13 @@
 package com.example.runningtimer.presenters;
 
-import android.view.KeyEvent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.example.runningtimer.stopwatch.models.Stopwatch;
 import com.example.runningtimer.ui.timers.TimerViewHolderInterface;
 import com.example.runningtimer.ui.timers.TimerViewInterface;
-import com.example.runningtimer.stopwatch.models.Stopwatch;
 import com.example.runningtimer.ui.timers.TimersActivity;
 
 import java.util.ArrayList;
@@ -15,9 +15,19 @@ import java.util.List;
 
 public class TimerPresenter {
 
+    private final Handler uiHandler = new Handler(Looper.getMainLooper());
+
     public List<Stopwatch> stopwatchList = new ArrayList<Stopwatch>();
     private TimerViewHolderInterface viewHolder;
     TimerViewInterface view;
+
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            view.updateAdapter();
+            uiHandler.postDelayed(this, 500);
+        }
+    };
 
     public TimerPresenter(TimersActivity view) {
         this.view = view;
@@ -45,15 +55,12 @@ public class TimerPresenter {
     }
 
     public void setEditListener(EditText editText) {
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    onEnterPressed(editText);
-                    return true;
-                }
-                return false;
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                onEnterPressed(editText);
+                return true;
             }
+            return false;
         });
     }
 
@@ -71,17 +78,20 @@ public class TimerPresenter {
         for (Stopwatch stopwatch : stopwatchList) {
             stopwatch.stopTimer();
         }
+        startUpdatingUITask();
     }
 
     private void startTimers(List<Stopwatch> stopwatchList) {
         for (Stopwatch stopwatch : stopwatchList) {
             stopwatch.startTimer();
         }
+        startUpdatingUITask();
     }
 
     public void addTimer() {
         stopwatchList.add(new Stopwatch());
         view.updateAdapter(stopwatchList);
+        startUpdatingUITask();
     }
 
     public void startStopTimer(Stopwatch stopwatch) {
@@ -97,6 +107,28 @@ public class TimerPresenter {
 
         stopwatchList.remove(stopwatch);
         view.updateAdapter(position);
+        startUpdatingUITask();
+    }
+
+    public void startUpdatingUITask() {
+        if (isOneTimerStarted()) {
+            uiHandler.postDelayed(runnable, 0);
+        } else {
+            uiHandler.removeCallbacksAndMessages(null);
+        }
+
+        view.updateAdapter();
+    }
+
+    private boolean isOneTimerStarted() {
+
+        for (Stopwatch stopwatch : stopwatchList) {
+            if (stopwatch.isStarted()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

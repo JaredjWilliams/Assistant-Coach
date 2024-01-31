@@ -10,6 +10,8 @@ public interface TimerViewInterface {
 
     void updateAdapter(List<Stopwatch> stopwatchList);
 
+    void updateAdapter();
+
     void setStartAllButtonText();
 
     void setStopAllButtonText();

@@ -29,12 +29,14 @@ public class TimersActivity extends AppCompatActivity implements TimerViewInterf
 
         setupViews();
 
+        presenter.startUpdatingUITask();
+
         new BottomNavigationMenu(this, this, R.id.navigation_timer);
     }
 
     private void setupRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.stopwatch_recycler_view);
-        adapter = new TimerAdapter(stopwatchList(), getApplication(), presenter);
+        adapter = new TimerAdapter(stopwatchList(), getApplication(), presenter, recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -75,6 +77,11 @@ public class TimersActivity extends AppCompatActivity implements TimerViewInterf
     @Override
     public void updateAdapter(List<Stopwatch> stopwatchList) {
         adapter.notifyItemInserted(stopwatchList.size() - 1);
+    }
+
+    @Override
+    public void updateAdapter() {
+        adapter.updateViews();
     }
 
     @Override

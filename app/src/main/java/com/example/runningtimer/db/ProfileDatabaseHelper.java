@@ -2,11 +2,15 @@ package com.example.runningtimer.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
@@ -40,7 +44,7 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put(COLUMN_ATHLETE_NAME, name);
+        cv.put(COLUMN_ATHLETE_NAME, capitalizeName(name));
 
         long result = db.insert(TABLE_NAME, null, cv);
 
@@ -53,5 +57,24 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         } else {
             Toast.makeText(context, "Added Successfully!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public Cursor readAllData() {
+        String query = "Select * from " + TABLE_NAME;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = null;
+
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        return cursor;
+    }
+
+    public String capitalizeName(String name) {
+        return Arrays.stream(name.split(" "))
+                .map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase())
+                .collect(Collectors.joining(" "));
     }
 }

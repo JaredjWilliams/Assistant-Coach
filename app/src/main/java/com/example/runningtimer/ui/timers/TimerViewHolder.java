@@ -173,6 +173,19 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 
                 editText.clearFocus();
 
+                if (editText.getText().toString().equals("Josh Brocato")) {
+                    athletePicture.setImageResource(R.drawable.josh_brocato);
+                }
+
+                if (editText.getText().toString().equals("Adrian Howard")) {
+                    athletePicture.setImageResource(R.drawable.adrian_howard);
+                }
+
+                if (editText.getText().toString().equals("Noah Shigley")) {
+                    athletePicture.setImageResource(R.drawable.noah_shigley);
+                }
+
+
                 return true;
             }
             return false;

@@ -2,17 +2,20 @@ package com.example.runningtimer.ui.profiles;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.widget.Toast;
 
 import com.example.runningtimer.db.ProfileDatabaseHelper;
 import com.example.runningtimer.stopwatch.models.Profile;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class ProfilesPresenter {
 
     private ProfileDatabaseHelper profileDb;
     private ArrayList<Profile> listOfProfiles = new ArrayList<>();
+    private ArrayList<byte[]> listOfImages = new ArrayList<>();
     private Context context;
     private ProfilesViewInterface view;
 
@@ -26,6 +29,12 @@ public class ProfilesPresenter {
         storeDataInArrays();
     }
 
+    private byte[] getBitmapAsByteArray(Bitmap image) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        return outputStream.toByteArray();
+    }
+
     private void storeDataInArrays() {
         Cursor cursor = profileDb.readAllData();
 
@@ -36,14 +45,16 @@ public class ProfilesPresenter {
         }
     }
 
-    public void addProfile(String name) {
+    public void addProfile(String name, Bitmap image) {
+        byte[] imageToBytes = getBitmapAsByteArray(image);
 
         if (isAlreadyCreated(name)) {
             makeToast("Profile already exists");
             return;
         }
-        profileDb.addProfile(name);
+        profileDb.addProfile(name, imageToBytes);
         update();
+
         view.updateAdapter(listOfProfiles);
     }
 
@@ -51,9 +62,11 @@ public class ProfilesPresenter {
         listOfProfiles.clear();
 
         while (cursor.moveToNext()) {
-            Profile profile = new Profile(cursor.getString(1));
+            Profile profile = new Profile(cursor.getString(1), cursor.getBlob(2));
             listOfProfiles.add(profile);
         }
+
+        System.out.println(listOfProfiles);
     }
 
     private void makeToast(String text) {

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class TimersActivity extends AppCompatActivity implements TimerViewInterface {
 
-    private final TimerPresenter presenter = new TimerPresenter(this);
+    private final TimerPresenter presenter = new TimerPresenter(this, this);
     private Button startAllButton;
     private FloatingActionButton addTimerButton;
     private TimerAdapter adapter;
@@ -32,6 +32,7 @@ public class TimersActivity extends AppCompatActivity implements TimerViewInterf
         setupViews();
 
         presenter.startUpdatingUITask();
+        presenter.update();
 
         new BottomNavigationMenu(this, this, R.id.navigation_timer);
     }

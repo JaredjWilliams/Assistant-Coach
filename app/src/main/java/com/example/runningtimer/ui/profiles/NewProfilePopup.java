@@ -2,99 +2,129 @@ package com.example.runningtimer.ui.profiles;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
-import android.widget.TextView;
+import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.db.ProfileDatabaseHelper;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-public class NewProfilePopup extends PopupWindow {
+public class NewProfilePopup extends AppCompatActivity {
+
+    ActivityResultLauncher<Intent> pickImageLauncher;
+    FloatingActionButton addProfileImageButton;
+    ConstraintLayout saveProfileLayout;
+    ProfileDatabaseHelper profileDb;
+    Button saveButton, cancelButton;
+    ProfilesPresenter presenter;
+    ImageView profileImage;
+    EditText nameField;
+    Context context;
 
     Animation fadeIn = new AlphaAnimation(0, 1);
     Animation fadeOut = new AlphaAnimation(1, 0);
-    ProfilesPresenter presenter;
-    ProfileDatabaseHelper profileDb;
-    ConstraintLayout saveProfileLayout;
-    EditText nameField;
-    Button saveButton, cancelButton;
-    Context context;
 
-    public NewProfilePopup(Context context, Activity activity, ProfilesPresenter presenter) {
-        super(context);
-        this.context = context;
+    public NewProfilePopup(Context context, Activity activity, ProfilesPresenter presenter, ActivityResultLauncher<Intent> pickImageLauncher) {
+        this.pickImageLauncher = pickImageLauncher;
         this.presenter = presenter;
+        this.context = context;
 
         profileDb = new ProfileDatabaseHelper(context);
 
         setupViews(activity);
 
-        setEditTextListener();
-        setSaveButtonListener();
+
+        setupAddProfileImageListener();
         setCancelButtonListener();
+        setSaveButtonListener();
+        setEditTextListener();
+
         saveProfileLayout.bringToFront();
     }
 
     private void setupViews(Activity activity) {
-        nameField = activity.findViewById(R.id.name_field);
+        addProfileImageButton = activity.findViewById(R.id.add_profile_image);
         saveProfileLayout = activity.findViewById(R.id.save_profile_layout);
-        saveButton = activity.findViewById(R.id.save_button);
         cancelButton = activity.findViewById(R.id.cancel_button);
+        profileImage = activity.findViewById(R.id.profile_image);
+        saveButton = activity.findViewById(R.id.save_button);
+        nameField = activity.findViewById(R.id.name_field);
 
         cancelButton.setBackgroundColor(ContextCompat.getColor(context, R.color.stop_button_color));
 
-        fadeIn.setDuration(500);
         fadeOut.setDuration(500);
+        fadeIn.setDuration(500);
+
         setAnimationListener();
         setFadeOutListener();
     }
 
+    private void setupAddProfileImageListener() {
+        addProfileImageButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            pickImageLauncher.launch(intent);
+        });
+    }
+
+    public void onActivityResultCallback(Uri selectedImage) {
+        profileImage.setImageURI(selectedImage);
+        addProfileImageButton.setVisibility(View.GONE);
+    }
+
     private void setSaveButtonListener() {
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = nameField.getText().toString().trim().toLowerCase();
-                presenter.addProfile(name);
-                saveProfileLayout.startAnimation(fadeOut);
-            }
+        saveButton.setOnClickListener(view -> {
+            BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
+            String name = nameField.getText().toString().trim().toLowerCase();
+            presenter.addProfile(name, drawable.getBitmap());
+            saveProfileLayout.startAnimation(fadeOut);
+            resetLayout();
         });
     }
 
     private void setCancelButtonListener() {
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveProfileLayout.startAnimation(fadeOut);
-            }
-        });
+        cancelButton.setOnClickListener(view -> saveProfileLayout.startAnimation(fadeOut));
     }
 
     private void setEditTextListener() {
-        nameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        nameField.setOnEditorActionListener((textView, i, event) -> {
 
-                if (i == EditorInfo.IME_ACTION_DONE) {
-                    saveProfileLayout.setVisibility(View.GONE);
+            if (i == EditorInfo.IME_ACTION_DONE || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
+                saveProfileLayout.setVisibility(View.GONE);
 
-                }
-
-                return false;
+                InputMethodManager imm = (InputMethodManager) nameField.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(nameField.getWindowToken(), 0);
+                nameField.clearFocus();
             }
+
+            return false;
         });
     }
 
     public void showPopUp() {
         saveProfileLayout.startAnimation(fadeIn);
+    }
+
+    private void resetLayout() {
+        nameField.setText("");
+        profileImage.setImageResource(0);
     }
 
 

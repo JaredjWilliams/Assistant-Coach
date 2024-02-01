@@ -1,10 +1,15 @@
 package com.example.runningtimer.presenters;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.runningtimer.db.ProfileDatabaseHelper;
+import com.example.runningtimer.stopwatch.models.Profile;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
 import com.example.runningtimer.ui.timers.TimerViewHolderInterface;
 import com.example.runningtimer.ui.timers.TimerViewInterface;
@@ -16,10 +21,12 @@ import java.util.List;
 public class TimerPresenter {
 
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
-
+    private ProfileDatabaseHelper profileDb;
     public List<Stopwatch> stopwatchList = new ArrayList<Stopwatch>();
+    public List<Profile> listOfProfiles = new ArrayList<>();
     private TimerViewHolderInterface viewHolder;
     TimerViewInterface view;
+    private Context context;
 
     private final Runnable runnable = new Runnable() {
         @Override
@@ -29,8 +36,38 @@ public class TimerPresenter {
         }
     };
 
-    public TimerPresenter(TimersActivity view) {
+    public TimerPresenter(TimersActivity view, Context context) {
         this.view = view;
+        this.context = context;
+        profileDb = new ProfileDatabaseHelper(context);
+
+    }
+
+    public void update() {
+        storeDataInArrays();
+    }
+
+    private void storeDataInArrays() {
+        Cursor cursor = profileDb.readAllData();
+
+        if (cursor.getCount() == 0) {
+            makeToast("No data available");
+        } else {
+            createListProfiles(cursor);
+        }
+    }
+
+    private void makeToast(String text) {
+        Toast.makeText(context, text , Toast.LENGTH_SHORT).show();
+    }
+
+    private void createListProfiles(Cursor cursor) {
+        listOfProfiles.clear();
+
+        while (cursor.moveToNext()) {
+            Profile profile = new Profile(cursor.getString(1), cursor.getBlob(2));
+            listOfProfiles.add(profile);
+        }
     }
 
     public boolean areAllTimersStarted(List<Stopwatch> stopwatchList) {

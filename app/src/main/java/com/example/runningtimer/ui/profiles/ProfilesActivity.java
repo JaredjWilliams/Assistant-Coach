@@ -1,8 +1,13 @@
 package com.example.runningtimer.ui.profiles;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,11 +22,15 @@ import java.util.List;
 
 public class ProfilesActivity extends AppCompatActivity implements ProfilesViewInterface {
 
-
+    private static final int PICK_IMAGE_REQUEST = 1;
     private ProfilesPresenter presenter;
     private ConstraintLayout profilePopup;
     private FloatingActionButton addProfileButton;
     private ProfileAdapter adapter;
+    private ActivityResultLauncher<Intent> pickImageLauncher;
+    private NewProfilePopup newProfilePopup;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,15 +38,29 @@ public class ProfilesActivity extends AppCompatActivity implements ProfilesViewI
 
         setContentView(R.layout.activity_profiles);
         presenter = new ProfilesPresenter(this, this);
+
         presenter.update();
 
         setUpViews();
-
         setUpAddProfileButtonClick();
-
         setUpRecyclerView();
 
         new BottomNavigationMenu(this, this, R.id.navigation_profiles);
+
+        pickImageLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                this::onActivityResultCallback);
+
+        newProfilePopup = new NewProfilePopup(this, this, presenter, pickImageLauncher);
+
+    }
+
+    private void onActivityResultCallback(ActivityResult result) {
+        if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+            Uri selectedImage = result.getData().getData();
+
+            newProfilePopup.onActivityResultCallback(selectedImage);
+        }
     }
 
     private void setUpViews() {
@@ -52,12 +75,8 @@ public class ProfilesActivity extends AppCompatActivity implements ProfilesViewI
     }
 
     private void setUpAddProfileButtonClick() {
-        addProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new NewProfilePopup(ProfilesActivity.this, ProfilesActivity.this, presenter).showPopUp();
-                presenter.deleteTable();
-            }
+        addProfileButton.setOnClickListener(view -> {
+            newProfilePopup.showPopUp();
         });
     }
 

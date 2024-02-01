@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.presenters.TimerPresenter;
+import com.example.runningtimer.stopwatch.models.Profile;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
 
 public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerViewHolderInterface {
@@ -173,22 +174,20 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 
                 editText.clearFocus();
 
-                if (editText.getText().toString().equals("Josh Brocato")) {
-                    athletePicture.setImageResource(R.drawable.josh_brocato);
-                }
-
-                if (editText.getText().toString().equals("Adrian Howard")) {
-                    athletePicture.setImageResource(R.drawable.adrian_howard);
-                }
-
-                if (editText.getText().toString().equals("Noah Shigley")) {
-                    athletePicture.setImageResource(R.drawable.noah_shigley);
-                }
+                setProfileImage(editText.getText().toString());
 
 
                 return true;
             }
             return false;
         });
+    }
+
+    private void setProfileImage(String name) {
+        for (Profile profile : presenter.listOfProfiles) {
+            if (profile.getName().equals(name)) {
+                athletePicture.setImageDrawable(profile.getProfilePicture());
+            }
+        }
     }
 }

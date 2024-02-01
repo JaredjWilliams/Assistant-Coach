@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/timer_number"
-        android:layout_width="167dp"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:text="00:00:00"
@@ -24,7 +24,7 @@
         android:id="@+id/athlete_name"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="40dp"
         android:ems="10"
         android:hint="Enter Name"
         android:inputType="text"
@@ -66,10 +66,10 @@
 
     <ImageView
         android:id="@+id/athlete_picture"
-        android:layout_width="67dp"
-        android:layout_height="76dp"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:background="@drawable/timer_profile_boarder_background"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
@@ -82,5 +82,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_delete" />
+
+    <TextView
+        android:id="@+id/last_lap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text=""
+        app:layout_constraintStart_toEndOf="@+id/timer_number"
+        app:layout_constraintTop_toBottomOf="@+id/athlete_name" />
+
+    <TextView
+        android:id="@+id/average_a_lap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/last_lap"
+        app:layout_constraintStart_toEndOf="@+id/timer_number"
+        app:layout_constraintTop_toBottomOf="@+id/athlete_name" />
+
+    <TextView
+        android:id="@+id/lap_count"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:text=""
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/lap_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

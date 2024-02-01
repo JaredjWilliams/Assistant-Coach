@@ -1,7 +1,6 @@
 package com.example.runningtimer.ui.timers;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,21 +54,11 @@ public class TimersActivity extends AppCompatActivity implements TimerViewInterf
     }
 
     private void setupNewTimerButton() {
-        addTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.addTimer();
-            }
-        });
+        addTimerButton.setOnClickListener(v -> presenter.addTimer());
     }
 
     private void setupStartAllButton() {
-        startAllButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.startStopAllTimers();
-            }
-        });
+        startAllButton.setOnClickListener(v -> presenter.startStopAllTimers());
     }
 
     @Override

@@ -17,12 +17,16 @@ public class Stopwatch {
     private long totalLapTime = 0;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private ScheduledFuture<?> timerHandle;
-    private List<Lap> laps = new ArrayList<Lap>();
+    private List<Lap> laps = new ArrayList<Lap>(0);
     private int lapCounter = 0;
     private boolean isStarted;
 
     public Stopwatch() {
         this.name = "";
+    }
+
+    public String getAverageLap() {
+        return formatTime(totalElapsedTime / laps.size());
     }
 
     public void startTimer() {
@@ -85,4 +89,6 @@ public class Stopwatch {
     public Lap getLastLap() {
         return laps.get(laps.size() - 1);
     }
+
+    public int getLapCounter() {return lapCounter;}
 }

@@ -82,7 +82,7 @@
             android:layout_width="108dp"
             android:layout_height="137dp"
             android:background="@drawable/timer_profile_boarder_background"
-            android:scaleType="fitXY"
+            android:scaleType="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_field" />

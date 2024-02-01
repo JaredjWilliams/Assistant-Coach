@@ -44,6 +44,7 @@ public class TimerAdapter extends RecyclerView.Adapter<TimerViewHolder> {
         holder.stopwatch = stopwatchList.get(position);
         holder.presenter = presenter;
         holder.setName();
+        holder.setLapCountText();
         holder.performSlideIn();
         holder.updateUI();
     }

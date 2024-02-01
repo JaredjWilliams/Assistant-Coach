@@ -29,7 +29,7 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     TimerPresenter presenter;
     GridLayout laps;
     Button startButton, lapButton;
-    TextView timeText;
+    TextView timeText, lastLapText, averageLap, lapCountText;
     EditText name;
     Stopwatch stopwatch;
     Context context;
@@ -65,6 +65,9 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         name = itemView.findViewById(R.id.athlete_name);
         athletePicture = itemView.findViewById(R.id.athlete_picture);
         deleteTimerButton = itemView.findViewById(R.id.delete_timer_button);
+        lastLapText = itemView.findViewById(R.id.last_lap);
+        averageLap = itemView.findViewById(R.id.average_a_lap);
+        lapCountText = itemView.findViewById(R.id.lap_count);
 
         setupStartButtonClick();
         setupLapButtonClick();
@@ -100,12 +103,27 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 
     }
 
+    public void setLapCountText() {
+        lapCountText.setText("" + (stopwatch.getLapCounter() + 1));
+    }
+
+    private void setAverageLap() {
+        averageLap.setText("Avg - " + stopwatch.getAverageLap());
+    }
+
     public void setDeleteTimerButtonClick() {
         deleteTimerButton.setOnClickListener(view -> {
             performSlideOut();
             presenter.delete(stopwatch);
-
+            resetViewHolder();
         });
+    }
+
+    public void resetViewHolder() {
+        athletePicture.setImageResource(0);
+        lastLapText.setText("");
+        averageLap.setText("");
+        lapCountText.setText("");
     }
 
     public void setStartStopButtonUI() {
@@ -127,23 +145,21 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     }
 
     private void setupLapButtonClick() {
-
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         lapButton.setOnClickListener(v -> {
 
-//                stopwatch.lapTimer();
-//                Lap lastLap = stopwatch.getLastLap();
-//                TextView textview = new TextView(context);
-//                String lapText = "<b>" + lastLap.getLapCount() + ":</b> " + lastLap.getTime();
-//                textview.setText(Html.fromHtml(lapText, Html.FROM_HTML_MODE_LEGACY));
-//
-//
-//                params.width = GridLayout.LayoutParams.WRAP_CONTENT;
-//                params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-//                textview.setPadding(5, 5, 5, 5);
-//
-//                laps.addView(textview);
+            if (stopwatch.isStarted()) {
+                stopwatch.lapTimer();
+                setLastLapText();
+                setAverageLap();
+                setLapCountText();
+            }
         });
+    }
+
+    private void setLastLapText() {
+        String lapText = "Last - " + stopwatch.getLastLap().getTime();
+
+        lastLapText.setText(lapText);
     }
 
     public void updateUI() {
@@ -187,7 +203,11 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         for (Profile profile : presenter.listOfProfiles) {
             if (profile.getName().equals(name)) {
                 athletePicture.setImageDrawable(profile.getProfilePicture());
+                return;
             }
         }
+
+        athletePicture.setImageResource(0);
+
     }
 }

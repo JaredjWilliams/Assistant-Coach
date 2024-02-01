@@ -125,6 +125,7 @@ public class NewProfilePopup extends AppCompatActivity {
     private void resetLayout() {
         nameField.setText("");
         profileImage.setImageResource(0);
+        addProfileImageButton.setVisibility(View.VISIBLE);
     }
 
 

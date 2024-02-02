@@ -20,6 +20,8 @@ public class Stopwatch {
     private List<Lap> laps = new ArrayList<Lap>(0);
     private int lapCounter = 0;
     private boolean isStarted;
+    private String raceName;
+    private String raceDistance;
 
     public Stopwatch() {
         this.name = "";
@@ -91,4 +93,16 @@ public class Stopwatch {
     }
 
     public int getLapCounter() {return lapCounter;}
+
+    public String getRaceName() {return  raceName;}
+
+    public void setRaceName(String raceName) {this.raceName = raceName;}
+
+    public String getRaceDistance() {
+        return raceDistance;
+    }
+
+    public void setRaceDistance(String raceDistance) {
+        this.raceDistance = raceDistance;
+    }
 }

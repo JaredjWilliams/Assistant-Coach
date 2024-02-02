@@ -1,14 +1,10 @@
 package com.example.runningtimer.presenters;
 
-import static org.mockito.Mockito.mock;
-
 import android.content.Context;
-import android.content.res.Resources;
 
 import com.example.runningtimer.db.ProfileDatabaseHelper;
 import com.example.runningtimer.stopwatch.models.Profile;
 import com.example.runningtimer.ui.profile.ProfileViewInterface;
-import com.example.runningtimer.utility.ByteArrayToDrawable;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +17,6 @@ public class ProfilePresenterTests {
     @Mock ProfileDatabaseHelper profileDb;
     @Mock Context context;
     @Mock ProfileViewInterface view;
-    @Mock Resources resources;
-
-    ByteArrayToDrawable mockByteArrayToDrawable = mock(ByteArrayToDrawable.class);
 
     ProfilePresenter presenter;
 
@@ -46,9 +39,7 @@ public class ProfilePresenterTests {
     @Test
     public void testUpdateView() {
 
-        Profile profile = new Profile("Testing", new byte[0]);
-
-        presenter.profile = profile;
+        presenter.profile = new Profile("Testing", new byte[0]);
         presenter.updateView();
 
         Mockito.verify(view).setProfileNameText("Testing");

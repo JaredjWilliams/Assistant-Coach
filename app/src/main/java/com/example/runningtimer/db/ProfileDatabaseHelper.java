@@ -33,6 +33,8 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     private static final String RACE_TABLE_NAME = "races";
     private static final String COLUMN_RACE_TIME = "time";
     private static final String COLUMN_DATE_OF_RACE = "date_of_race";
+    private static final String COLUMN_RACE_NAME = "race_name";
+    private static final String COLUMN_RACE_DISTANCE = "race_distance";
 
     public ProfileDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,6 +52,8 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         query = "CREATE TABLE " + RACE_TABLE_NAME + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_ATHLETE_NAME + " TEXT," +
+                COLUMN_RACE_NAME + " TEXT," +
+                COLUMN_RACE_DISTANCE + " TEXT," +
                 COLUMN_DATE_OF_RACE + " DATE," +
                 COLUMN_RACE_TIME + " TEXT);";
 
@@ -63,11 +67,13 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void addRace(String name, String time) {
+    public void addRace(String name, String time, String raceName, String raceDistance) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_ATHLETE_NAME, capitalizeName(name));
+        cv.put(COLUMN_RACE_NAME, raceName);
+        cv.put(COLUMN_RACE_DISTANCE, raceDistance);
         cv.put(COLUMN_DATE_OF_RACE, LocalDateTime.now().toString());
         cv.put(COLUMN_RACE_TIME, time);
 

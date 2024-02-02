@@ -170,4 +170,7 @@ public class TimerPresenter {
         return false;
     }
 
+    public void saveTime(Stopwatch stopwatch, String name) {
+        profileDb.addRace(name, stopwatch.getElapsedTime());
+    }
 }

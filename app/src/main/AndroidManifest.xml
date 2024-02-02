@@ -29,10 +29,11 @@
         <activity android:name=".ui.timers.TimersActivity"
             android:label="Timers"/>
 
-        <activity
-            android:name=".ui.profiles.ProfilesActivity"
-
+        <activity android:name=".ui.profiles.ProfilesActivity"
             android:label="Profiles"/>
+
+        <activity android:name=".ui.profile.ProfileActivity"
+            android:label="Profile"/>
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import com.example.runningtimer.stopwatch.models.Profile;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,10 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_ATHLETE_NAME = "athlete_name";
     private static final String COLUMN_PROFILE_PICTURE = "profile_picture";
 
+    private static final String RACE_TABLE_NAME = "races";
+    private static final String COLUMN_RACE_TIME = "time";
+    private static final String COLUMN_DATE_OF_RACE = "date_of_race";
+
     public ProfileDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
@@ -41,12 +46,38 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_ATHLETE_NAME + " TEXT," +
                 COLUMN_PROFILE_PICTURE + " BLOB);";
         sqLiteDatabase.execSQL(query);
+
+        query = "CREATE TABLE " + RACE_TABLE_NAME + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_ATHLETE_NAME + " TEXT," +
+                COLUMN_DATE_OF_RACE + " DATE," +
+                COLUMN_RACE_TIME + " TEXT);";
+
+        sqLiteDatabase.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + RACE_TABLE_NAME);
         onCreate(sqLiteDatabase);
+    }
+
+    public void addRace(String name, String time) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_ATHLETE_NAME, capitalizeName(name));
+        cv.put(COLUMN_DATE_OF_RACE, LocalDateTime.now().toString());
+        cv.put(COLUMN_RACE_TIME, time);
+
+        try {
+            long result = db.insert(RACE_TABLE_NAME, null, cv);
+            onDataInsert(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            onDataInsert(-1);
+        }
     }
 
     public void addProfile(String name, byte[] imageBytes) {
@@ -56,8 +87,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_ATHLETE_NAME, capitalizeName(name));
         cv.put(COLUMN_PROFILE_PICTURE, imageBytes);
 
-
-
         try {
             long result = db.insert(TABLE_NAME, null, cv);
             onDataInsert(result);
@@ -65,8 +94,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
             onDataInsert(-1);
         }
-
-
     }
 
     private void onDataInsert(long result) {
@@ -90,19 +117,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public List<Profile> readAllDataTest() {
-        String query = "Select * from " + TABLE_NAME;
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor cursor = null;
-
-        if (db != null) {
-            cursor = db.rawQuery(query, null);
-        }
-
-        return createListProfiles(cursor);
-    }
-
     public String capitalizeName(String name) {
         return Arrays.stream(name.split(" "))
                 .map(s -> Character.toUpperCase(s.charAt(0)) + s.substring(1).toLowerCase())
@@ -114,16 +128,5 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL(query);
-    }
-
-    private List<Profile> createListProfiles(Cursor cursor) {
-        listOfProfiles.clear();
-
-        while (cursor.moveToNext()) {
-            Profile profile = new Profile(cursor.getString(1), cursor.getBlob(2));
-            listOfProfiles.add(profile);
-        }
-
-        return listOfProfiles;
     }
 }

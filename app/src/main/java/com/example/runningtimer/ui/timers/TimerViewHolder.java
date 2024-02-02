@@ -28,7 +28,7 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     ConstraintLayout stopwatchLayout;
     TimerPresenter presenter;
     GridLayout laps;
-    Button startButton, lapButton;
+    Button startButton, lapButton, saveButton;
     TextView timeText, lastLapText, averageLap, lapCountText;
     EditText name;
     Stopwatch stopwatch;
@@ -68,10 +68,13 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         lastLapText = itemView.findViewById(R.id.last_lap);
         averageLap = itemView.findViewById(R.id.average_a_lap);
         lapCountText = itemView.findViewById(R.id.lap_count);
+        saveButton = itemView.findViewById(R.id.save_button);
+
 
         setupStartButtonClick();
         setupLapButtonClick();
         setDeleteTimerButtonClick();
+        setupSaveButtonListener();
 
         setEditListener(name);
 
@@ -101,6 +104,12 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 
     public void setLapsLayout() {
 
+    }
+
+    public void setupSaveButtonListener() {
+        saveButton.setOnClickListener(view -> {
+            presenter.saveTime(stopwatch, name.getText().toString());
+        });
     }
 
     public void setLapCountText() {

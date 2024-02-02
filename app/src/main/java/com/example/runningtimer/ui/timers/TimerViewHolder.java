@@ -104,10 +104,6 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
         stopwatch.setName(name);
     }
 
-    public void setLapsLayout() {
-
-    }
-
     public void setupSaveButtonListener() {
         saveButton.setOnClickListener(view -> {
             presenter.saveTime(stopwatch, name.getText().toString());

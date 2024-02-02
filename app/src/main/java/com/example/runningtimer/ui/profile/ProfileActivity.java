@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.presenters.ProfilePresenter;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 public class ProfileActivity extends AppCompatActivity implements ProfileViewInterface {
 
     ProfilePresenter presenter;
+    RacesAdapter adapter;
     Profile profile;
     TextView profileName;
     ImageView profilePicture;
@@ -23,7 +25,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileViewInt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         presenter = new ProfilePresenter(this, this);
+
+
         setContentView(R.layout.activity_profile);
 
         setupViews();
@@ -31,6 +37,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileViewInt
         retrieveNameFromGson();
 
         new BottomNavigationMenu(this, this, 0);
+    }
+
+    private void setupRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.races_recycler_view);
+        adapter = new RacesAdapter();
     }
 
     private void setupViews() {

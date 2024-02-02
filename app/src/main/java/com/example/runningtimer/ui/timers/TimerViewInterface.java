@@ -12,7 +12,7 @@ public interface TimerViewInterface {
 
     void updateAdapter();
 
-    void setStartAllButtonText();
+    void setStartAllButtonColor();
 
-    void setStopAllButtonText();
+    void setStopAllButtonColor();
 }

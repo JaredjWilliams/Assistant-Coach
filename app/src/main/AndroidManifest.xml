@@ -27,7 +27,7 @@
         </activity>
 
         <activity android:name=".ui.timers.TimersActivity"
-            android:label="Timers"/>
+            android:label="Timers: "/>
 
         <activity android:name=".ui.profiles.ProfilesActivity"
             android:label="Profiles"/>

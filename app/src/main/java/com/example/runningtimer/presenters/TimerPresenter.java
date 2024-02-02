@@ -104,10 +104,10 @@ public class TimerPresenter {
     public void startStopAllTimers() {
         if (areAllTimersStarted(stopwatchList)) {
             stopTimers(stopwatchList);
-            view.setStartAllButtonText();
+            view.setStartAllButtonColor();
         } else {
             startTimers(stopwatchList);
-            view.setStopAllButtonText();
+            view.setStopAllButtonColor();
         }
     }
 
@@ -171,6 +171,18 @@ public class TimerPresenter {
     }
 
     public void saveTime(Stopwatch stopwatch, String name) {
-        profileDb.addRace(name, stopwatch.getElapsedTime());
+        profileDb.addRace(name, stopwatch.getElapsedTime(), stopwatch.getRaceName(), stopwatch.getRaceDistance());
+    }
+
+    public void setRaceNameForStopwatches(String raceName) {
+        for (Stopwatch stopwatch : stopwatchList) {
+            stopwatch.setRaceName(raceName);
+        }
+    }
+
+    public void setRaceDistanceForStopwatches(String distance) {
+        for (Stopwatch stopwatch : stopwatchList) {
+            stopwatch.setRaceDistance(distance);
+        }
     }
 }

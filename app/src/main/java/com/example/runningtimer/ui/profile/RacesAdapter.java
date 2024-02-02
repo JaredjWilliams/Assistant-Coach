@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class RacesAdapter extends RecyclerView.Adapter<RaceViewHolder> {
+
+
+
     @NonNull
     @Override
     public RaceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

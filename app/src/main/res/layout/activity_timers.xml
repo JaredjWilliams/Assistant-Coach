@@ -7,33 +7,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Button
-        android:id="@+id/start_all_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Start All Timers"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/stopwatch_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:background="@color/primary_background"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/start_all_button" />
+        app:layout_constraintTop_toBottomOf="@+id/current_race_distance" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_timer_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         app:backgroundTint="#8E7F00"
-        app:layout_constraintBottom_toTopOf="@+id/nav_view"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/stopwatch_recycler_view"
+        app:layout_constraintEnd_toStartOf="@+id/start_stop_all_timers_button"
+        app:layout_constraintHorizontal_bias="0.735"
+        app:layout_constraintStart_toEndOf="@+id/current_race_distance"
+        app:layout_constraintTop_toTopOf="@+id/start_stop_all_timers_button"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -47,6 +43,36 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/start_stop_all_timers_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/current_race_distance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.444"
+        app:srcCompat="@android:drawable/ic_menu_recent_history" />
+
+    <EditText
+        android:id="@+id/current_race_distance"
+        android:layout_width="242dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/profile_card_background"
+        android:ems="10"
+        android:inputType="text"
+        android:padding="10dp"
+        android:hint="Distance i.e 5k or 2m"
+        android:textColorHint="#808080"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

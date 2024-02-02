@@ -23,14 +23,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
         this.profiles = profiles;
         this.context = context;
         this.presenter = presenter;
-
-        System.out.println(profiles.toString());
     }
+
     @NonNull
     @Override
     public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.profile_layout, parent, false);
-        return new ProfileViewHolder(view);
+        return new ProfileViewHolder(view, context);
     }
 
     @Override

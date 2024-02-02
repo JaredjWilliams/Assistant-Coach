@@ -129,4 +129,31 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(query);
     }
+
+    public Profile retrieveProfileFor(String NAME) {
+
+        String query = " SELECT * FROM " + TABLE_NAME +
+                " WHERE " + COLUMN_ATHLETE_NAME +
+                " LIKE '" + NAME + "';";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = null;
+
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        try {
+            cursor.moveToFirst();
+            return new Profile(cursor.getString(1), cursor.getBlob(2));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Profile("Something went wrong :( ", new byte[] {});
+        }
+
+
+
+
+    }
 }

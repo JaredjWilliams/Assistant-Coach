@@ -1,6 +1,7 @@
 package com.example.runningtimer.ui.timers;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
@@ -22,6 +23,7 @@ import com.example.runningtimer.R;
 import com.example.runningtimer.presenters.TimerPresenter;
 import com.example.runningtimer.stopwatch.models.Profile;
 import com.example.runningtimer.stopwatch.models.Stopwatch;
+import com.example.runningtimer.utility.ByteArrayToDrawable;
 
 public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerViewHolderInterface {
 
@@ -211,7 +213,10 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
     private void setProfileImage(String name) {
         for (Profile profile : presenter.listOfProfiles) {
             if (profile.getName().equals(name)) {
-                athletePicture.setImageDrawable(profile.getProfilePicture());
+                Drawable profilePicture = ByteArrayToDrawable.byteArrayToDrawable(
+                        profile.getProfilePicture(), context
+                );
+                athletePicture.setImageDrawable(profilePicture);
                 return;
             }
         }

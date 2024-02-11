@@ -106,6 +106,7 @@ public class TimerViewHolder extends RecyclerView.ViewHolder implements TimerVie
 
     public void setupSaveButtonListener() {
         saveButton.setOnClickListener(view -> {
+            presenter.saveRaceNameAndDistance(stopwatch);
             presenter.saveTime(stopwatch, name.getText().toString());
         });
     }

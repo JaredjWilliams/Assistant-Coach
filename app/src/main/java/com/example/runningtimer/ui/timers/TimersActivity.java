@@ -149,6 +149,16 @@ public class TimersActivity extends AppCompatActivity implements TimerViewInterf
         startStopAllTimersButton.setBackgroundTintList(colorStateList);
     }
 
+    @Override
+    public String getRaceDistance() {
+        return raceDistance.getText().toString();
+    }
+
+    @Override
+    public String getRaceName() {
+        return raceName.getText().toString();
+    }
+
     private List<Stopwatch> stopwatchList() {
         return presenter.stopwatchList;
     }

@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 
 import com.example.runningtimer.stopwatch.models.Profile;
+import com.example.runningtimer.stopwatch.models.race.Race;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
     private List<Profile> listOfProfiles = new ArrayList<>();
+    private RaceTable raceTable;
+    private ProfileTable profileTable;
     private static final String DATABASE_NAME = "Profiles.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -43,21 +46,8 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String query = "CREATE TABLE " + TABLE_NAME + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_ATHLETE_NAME + " TEXT," +
-                COLUMN_PROFILE_PICTURE + " BLOB);";
-        sqLiteDatabase.execSQL(query);
-
-        query = "CREATE TABLE " + RACE_TABLE_NAME + " (" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_ATHLETE_NAME + " TEXT," +
-                COLUMN_RACE_NAME + " TEXT," +
-                COLUMN_RACE_DISTANCE + " TEXT," +
-                COLUMN_DATE_OF_RACE + " DATE," +
-                COLUMN_RACE_TIME + " TEXT);";
-
-        sqLiteDatabase.execSQL(query);
+        profileTable.createProfileTable(sqLiteDatabase);
+        raceTable.createRaceTable(sqLiteDatabase);
     }
 
     @Override
@@ -137,7 +127,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Profile retrieveProfileFor(String NAME) {
-
         String query = " SELECT * FROM " + TABLE_NAME +
                 " WHERE " + COLUMN_ATHLETE_NAME +
                 " LIKE '" + NAME + "';";
@@ -157,9 +146,35 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
             return new Profile("Something went wrong :( ", new byte[] {});
         }
+    }
 
+    public List<Race> retrieveRacesFor(String NAME) {
+        String query = " SELECT * FROM " + RACE_TABLE_NAME +
+                " WHERE " + COLUMN_ATHLETE_NAME +
+                " LIKE '" + NAME + "';";
 
+        SQLiteDatabase db = this.getWritableDatabase();
 
+        Cursor cursor = null;
 
+        if (db != null) {
+            cursor = db.rawQuery(query, null);
+        }
+
+        try {
+            List<Race> raceList = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                raceList.add(new Race(cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5)));
+            }
+
+            return raceList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 }

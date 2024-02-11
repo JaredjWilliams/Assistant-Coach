@@ -6,13 +6,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.runningtimer.R;
 import com.example.runningtimer.presenters.ProfilePresenter;
 import com.example.runningtimer.stopwatch.models.Profile;
+import com.example.runningtimer.stopwatch.models.race.Race;
 import com.example.runningtimer.ui.bottom_navigation.BottomNavigationMenu;
 import com.google.gson.Gson;
+
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileViewInterface {
 
@@ -36,12 +40,16 @@ public class ProfileActivity extends AppCompatActivity implements ProfileViewInt
 
         retrieveNameFromGson();
 
+        setupRecyclerView();
+
         new BottomNavigationMenu(this, this, 0);
     }
 
     private void setupRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.races_recycler_view);
-        adapter = new RacesAdapter();
+        adapter = new RacesAdapter(raceList(), this, presenter);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void setupViews() {
@@ -66,7 +74,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileViewInt
         if (profileJSON != null) {
             String name = new Gson().fromJson(profileJSON, String.class);
             presenter.retrieveProfile(name);
+            presenter.retrieveRaces(name);
         }
+    }
+
+    private List<Race> raceList() {
+        return presenter.getRaceList();
     }
 
 }

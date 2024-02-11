@@ -185,4 +185,9 @@ public class TimerPresenter {
             stopwatch.setRaceDistance(distance);
         }
     }
+
+    public void saveRaceNameAndDistance(Stopwatch stopwatch) {
+        stopwatch.setRaceDistance(view.getRaceDistance());
+        stopwatch.setRaceName(view.getRaceName());
+    }
 }

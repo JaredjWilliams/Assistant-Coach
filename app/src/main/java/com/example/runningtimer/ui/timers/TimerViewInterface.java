@@ -15,4 +15,8 @@ public interface TimerViewInterface {
     void setStartAllButtonColor();
 
     void setStopAllButtonColor();
+
+    String getRaceDistance();
+
+    String getRaceName();
 }

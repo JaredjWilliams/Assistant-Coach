@@ -90,7 +90,4 @@ public class ProfilesPresenter {
         return listOfProfiles;
     }
 
-    public void deleteTable() {
-        profileDb.deleteData();
-    }
 }

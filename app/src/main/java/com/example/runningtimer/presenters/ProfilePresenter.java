@@ -5,12 +5,16 @@ import android.graphics.drawable.Drawable;
 
 import com.example.runningtimer.db.ProfileDatabaseHelper;
 import com.example.runningtimer.stopwatch.models.Profile;
+import com.example.runningtimer.stopwatch.models.race.Race;
 import com.example.runningtimer.ui.profile.ProfileViewInterface;
 import com.example.runningtimer.utility.ByteArrayToDrawable;
+
+import java.util.List;
 
 public class ProfilePresenter {
 
     public ProfileDatabaseHelper profileDb;
+    List<Race> raceList;
     Context context;
     ProfileViewInterface view;
     Profile profile;
@@ -32,6 +36,10 @@ public class ProfilePresenter {
         updateView();
     }
 
+    public void retrieveRaces(String name) {
+        raceList = profileDb.retrieveRacesFor(name);
+    }
+
     public Drawable getDrawableFromByteArray() {
         return ByteArrayToDrawable.byteArrayToDrawable(
                 profile.getProfilePicture(), context
@@ -39,6 +47,7 @@ public class ProfilePresenter {
     }
 
 
-
-
+    public List<Race> getRaceList() {
+        return raceList;
+    }
 }

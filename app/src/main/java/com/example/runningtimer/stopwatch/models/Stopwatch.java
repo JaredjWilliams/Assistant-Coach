@@ -1,5 +1,7 @@
 package com.example.runningtimer.stopwatch.models;
 
+import com.example.runningtimer.utility.TimeConversion;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +71,7 @@ public class Stopwatch {
     }
 
     public String getElapsedTime() {
-        return formatTime(totalElapsedTime);
+        return TimeConversion.convertToMinSeconds(formatTime(totalElapsedTime));
     }
 
     public String getName() {

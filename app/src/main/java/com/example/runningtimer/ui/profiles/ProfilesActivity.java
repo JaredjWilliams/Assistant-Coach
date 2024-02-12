@@ -55,6 +55,16 @@ public class ProfilesActivity extends AppCompatActivity implements ProfilesViewI
 
     }
 
+    @Override
+    public void updateNewProfilePopup() {
+        newProfilePopup.closePopUp();
+    }
+
+    @Override
+    public void resetNewProfilePopup() {
+        newProfilePopup.resetLayout();
+    }
+
     private void onActivityResultCallback(ActivityResult result) {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
             Uri selectedImage = result.getData().getData();

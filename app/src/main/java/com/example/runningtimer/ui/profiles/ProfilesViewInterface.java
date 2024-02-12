@@ -7,5 +7,9 @@ import java.util.List;
 public interface ProfilesViewInterface {
 
 
+    void updateNewProfilePopup();
+
+    void resetNewProfilePopup();
+
     void updateAdapter(List<Profile> profileList);
 }

@@ -3,7 +3,7 @@ package com.example.runningtimer.ui.profiles;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
@@ -91,11 +91,11 @@ public class NewProfilePopup extends AppCompatActivity {
 
     private void setSaveButtonListener() {
         saveButton.setOnClickListener(view -> {
-            BitmapDrawable drawable = (BitmapDrawable) profileImage.getDrawable();
-            String name = nameField.getText().toString().trim().toLowerCase();
-            presenter.addProfile(name, drawable.getBitmap());
-            saveProfileLayout.startAnimation(fadeOut);
-            resetLayout();
+
+            String name = nameField.getText().toString();
+            Drawable drawable = profileImage.getDrawable();
+
+            presenter.addProfile(name, drawable);
         });
     }
 
@@ -122,7 +122,9 @@ public class NewProfilePopup extends AppCompatActivity {
         saveProfileLayout.startAnimation(fadeIn);
     }
 
-    private void resetLayout() {
+    public void closePopUp() { saveProfileLayout.startAnimation(fadeOut);}
+
+    public void resetLayout() {
         nameField.setText("");
         profileImage.setImageResource(0);
         addProfileImageButton.setVisibility(View.VISIBLE);

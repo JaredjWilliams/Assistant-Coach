@@ -3,6 +3,8 @@ package com.example.runningtimer.ui.profiles;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.widget.Toast;
 
 import com.example.runningtimer.db.ProfileDatabaseHelper;
@@ -21,8 +23,9 @@ public class ProfilesPresenter {
 
     public ProfilesPresenter(Context context, ProfilesViewInterface view) {
         this.context = context;
-        profileDb = new ProfileDatabaseHelper(context);
         this.view = view;
+
+        profileDb = new ProfileDatabaseHelper(context);
     }
 
     public void update() {
@@ -45,17 +48,21 @@ public class ProfilesPresenter {
         }
     }
 
-    public void addProfile(String name, Bitmap image) {
-        byte[] imageToBytes = getBitmapAsByteArray(image);
+    public void addProfile(String name, Drawable image) {
+        BitmapDrawable drawable = (BitmapDrawable) image;
+        String cleanedName = name.trim().toLowerCase();
+        byte[] imageToBytes = getBitmapAsByteArray(drawable.getBitmap());
 
-        if (isAlreadyCreated(name)) {
+        if (isAlreadyCreated(cleanedName)) {
             makeToast("Profile already exists");
             return;
         }
-        profileDb.addProfile(name, imageToBytes);
+        profileDb.addProfile(cleanedName, imageToBytes);
         update();
 
         view.updateAdapter(listOfProfiles);
+        view.updateNewProfilePopup();
+        view.resetNewProfilePopup();
     }
 
     private void createListProfiles(Cursor cursor) {
@@ -74,8 +81,6 @@ public class ProfilesPresenter {
     }
 
     public boolean isAlreadyCreated(String name) {
-
-        boolean isCreated = false;
 
         for (Profile p : listOfProfiles) {
             if (p.getName().equals(name)) {
